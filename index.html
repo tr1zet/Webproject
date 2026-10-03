@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Доступное приложение для управления повседневными задачами">
+    <title>Мои задачи</title>
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem('todo-theme');
+          const theme = savedTheme === 'dark' || savedTheme === 'light'
+            ? savedTheme
+            : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="dist/css/main.css">
+    <script src="js/main.js" defer></script>
+  </head>
+  <body class="min-w-80 bg-slate-100 font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50">
+    <a class="fixed top-3 left-3 z-50 -translate-y-40 rounded-lg bg-indigo-700 px-4 py-2 font-bold text-white focus:translate-y-0 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 dark:bg-indigo-400 dark:text-slate-950 dark:focus-visible:outline-fuchsia-300" href="#task-list-title">Перейти к списку задач</a>
+
+    <main class="grid min-h-screen place-items-center bg-[radial-gradient(circle_at_10%_10%,#dbeafe,transparent_34rem)] px-5 py-12 dark:bg-[radial-gradient(circle_at_10%_10%,#172554,transparent_34rem)]">
+      <section class="min-h-160 w-full max-w-4xl rounded-3xl border border-slate-300 bg-white p-5 shadow-[0_24px_70px_rgb(30_41_59_/_0.15)] sm:p-10 dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_24px_70px_rgb(0_0_0_/_0.35)]" aria-labelledby="page-title">
+        <header class="mb-8 flex items-start justify-between gap-4 sm:items-center">
+          <div>
+            <p class="mb-1 text-sm font-bold tracking-widest text-indigo-700 uppercase dark:text-indigo-300">Организуйте свой день</p>
+            <h1 class="text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl" id="page-title">Мои задачи</h1>
+          </div>
+          <button class="js-theme-toggle inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-300 bg-slate-50 px-3 py-2 font-bold text-slate-900 transition-colors hover:bg-slate-100 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 motion-reduce:transition-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 dark:focus-visible:outline-fuchsia-300" type="button" aria-pressed="false">
+            <svg class="shrink-0" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path d="M12 3a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H13a1 1 0 0 1-1-1Zm0 18a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H13a1 1 0 0 1-1-1ZM4.22 5.64a1 1 0 0 1 1.42-1.42l.01.01a1 1 0 0 1-1.42 1.42l-.01-.01Zm12.73 12.73a1 1 0 0 1 1.42-1.42l.01.01a1 1 0 0 1-1.42 1.42l-.01-.01ZM2 12a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H3a1 1 0 0 1-1-1Zm18 0a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H21a1 1 0 0 1-1-1ZM4.22 18.36a1 1 0 0 1 0-1.41l.01-.01a1 1 0 0 1 1.42 1.42l-.01.01a1 1 0 0 1-1.42-.01ZM16.95 5.63a1 1 0 0 1 0-1.41l.01-.01a1 1 0 1 1 1.42 1.42l-.01.01a1 1 0 0 1-1.42-.01ZM17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z" fill="currentColor"/>
+            </svg>
+            <span class="js-theme-label max-[32rem]:sr-only">Тёмная тема</span>
+          </button>
+        </header>
+
+        <div class="flex flex-col items-stretch gap-4 border-b border-slate-300 pb-6 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700">
+          <div class="relative flex-1">
+            <label class="sr-only" for="task-search">Поиск задач</label>
+            <svg class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path d="m20 20-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input class="js-search min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50 py-3 pr-4 pl-12 text-slate-900 placeholder:text-slate-500 hover:border-slate-500 focus-visible:border-indigo-700 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400 dark:focus-visible:border-indigo-300 dark:focus-visible:outline-fuchsia-300" id="task-search" type="search" placeholder="Найти задачу…" autocomplete="off">
+          </div>
+          <button class="js-add-task inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-indigo-700 px-4 py-3 font-bold text-white transition-colors hover:bg-indigo-900 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 active:translate-y-px motion-reduce:transition-none dark:bg-indigo-400 dark:text-slate-950 dark:hover:bg-indigo-300 dark:focus-visible:outline-fuchsia-300" type="button">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Добавить задачу</span>
+          </button>
+        </div>
+
+        <div class="my-6 mb-4 flex items-center justify-between gap-4" aria-live="polite" aria-atomic="true">
+          <h2 class="text-lg font-bold" id="task-list-title">Список задач</h2>
+          <p class="js-counter text-sm font-semibold text-slate-600 dark:text-slate-300">Нет задач</p>
+        </div>
+
+        <ul class="js-task-list grid list-none gap-3 p-0" aria-labelledby="task-list-title"></ul>
+
+        <div class="js-empty-state grid justify-items-center px-4 py-16 text-center text-slate-600 dark:text-slate-300" hidden>
+          <svg class="mb-4 text-indigo-700 dark:text-indigo-300" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false">
+            <path d="M18 10h28a6 6 0 0 1 6 6v36H12V16a6 6 0 0 1 6-6Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M23 25h18M23 35h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="m23 44 4 4 9-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h2 class="js-empty-title mb-2 text-xl font-bold text-slate-900 dark:text-white">Задач пока нет</h2>
+          <p class="js-empty-text max-w-md">Добавьте первую задачу — и начните двигаться к цели.</p>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="js-task-dialog m-auto max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-lg rounded-3xl border-0 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-950/60 backdrop:backdrop-blur-sm dark:bg-slate-900 dark:text-white" aria-labelledby="dialog-title" aria-describedby="dialog-hint">
+      <form class="js-task-form p-5 sm:p-8" method="dialog" novalidate>
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-bold tracking-widest text-indigo-700 uppercase dark:text-indigo-300">План на сегодня</p>
+            <h2 class="text-2xl font-bold" id="dialog-title">Новая задача</h2>
+          </div>
+          <button class="js-close-dialog grid size-11 place-items-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 motion-reduce:transition-none dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:outline-fuchsia-300" type="button" aria-label="Закрыть окно">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <p class="my-4 text-slate-600 dark:text-slate-300" id="dialog-hint">Введите короткое и понятное название.</p>
+        <div class="grid gap-2">
+          <label class="font-bold" for="task-title-input">Название задачи</label>
+          <input class="js-task-title min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus-visible:border-indigo-700 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600 aria-invalid:border-red-700 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus-visible:border-indigo-300 dark:focus-visible:outline-fuchsia-300 dark:aria-invalid:border-red-300" id="task-title-input" name="title" type="text" maxlength="120" required autocomplete="off" aria-describedby="task-title-error">
+          <p class="js-form-error min-h-6 text-sm font-semibold text-red-700 dark:text-red-300" id="task-title-error" role="alert"></p>
+        </div>
+        <div class="mt-6 flex items-center justify-end gap-3">
+          <button class="js-cancel-dialog inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-bold text-slate-900 transition-colors hover:bg-slate-100 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 motion-reduce:transition-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 dark:focus-visible:outline-fuchsia-300" type="button">Отмена</button>
+          <button class="js-submit-task inline-flex min-h-12 items-center justify-center rounded-xl bg-indigo-700 px-4 py-3 font-bold text-white transition-colors hover:bg-indigo-900 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-fuchsia-600 motion-reduce:transition-none dark:bg-indigo-400 dark:text-slate-950 dark:hover:bg-indigo-300 dark:focus-visible:outline-fuchsia-300" type="submit">Добавить</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="js-live-region sr-only" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>
+
