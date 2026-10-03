@@ -1,0 +1,40 @@
+@use "../utils" as u;
+
+.search {
+  position: relative;
+  flex: 1;
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 0.95rem;
+    color: var(--text-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  &__input {
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0.7rem 1rem 0.7rem 2.8rem;
+    border: 1px solid var(--border);
+    border-radius: u.$radius-small;
+    color: var(--text-primary);
+    background: var(--surface-subtle);
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 1;
+    }
+
+    &:hover {
+      border-color: var(--text-muted);
+    }
+
+    &:focus-visible {
+      @include u.focus-ring;
+      border-color: var(--primary);
+    }
+  }
+}
+

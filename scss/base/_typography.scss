@@ -1,0 +1,19 @@
+@use "../utils" as u;
+
+body {
+  color: var(--text-primary);
+  font-family: u.$font-family;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p {
+  margin-block: 0;
+}
+
+.visually-hidden {
+  @include u.visually-hidden;
+}
+

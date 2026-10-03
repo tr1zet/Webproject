@@ -1,0 +1,110 @@
+@use "../utils" as u;
+
+.button,
+.theme-toggle,
+.icon-button,
+.task__action {
+  @include u.interactive-transition;
+  border: 0;
+
+  &:focus-visible {
+    @include u.focus-ring;
+  }
+}
+
+.button {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  border-radius: u.$radius-small;
+  font-weight: 750;
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &--primary {
+    color: var(--primary-text);
+    background: var(--primary);
+
+    &:hover {
+      background: var(--primary-hover);
+    }
+  }
+
+  &--secondary {
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    background: var(--surface-subtle);
+
+    &:hover {
+      background: var(--surface-hover);
+    }
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+  font-weight: 700;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+
+  @media (max-width: 32rem) {
+    span {
+      @include u.visually-hidden;
+    }
+  }
+}
+
+.icon-button,
+.task__action {
+  display: inline-grid;
+  width: 2.65rem;
+  height: 2.65rem;
+  place-items: center;
+  border-radius: u.$radius-small;
+  color: var(--text-secondary);
+  background: transparent;
+
+  &:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+}
+
+.task__action--delete:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 20;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.5rem;
+  color: var(--primary-text);
+  background: var(--primary);
+  font-weight: 750;
+  transform: translateY(-160%);
+
+  &:focus {
+    @include u.focus-ring;
+    transform: translateY(0);
+  }
+}
+
