@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Семь учебных задач на Vue 3: реактивность, компоненты, computed, watch и жизненный цикл" />
+  <title>Лабораторная №5 — Введение в Vue</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef2ff;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --text: #172033;
+      --muted: #526078;
+      --border: #d7dfeb;
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #eef2ff;
+      --success: #047857;
+      --danger: #b42318;
+      --focus: #c026d3;
+      --shadow: 0 24px 70px rgb(30 41 59 / 14%);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--page);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, #dbeafe 0, transparent 32rem),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .shell {
+      width: min(100% - 2rem, 1024px);
+      margin-inline: auto;
+      padding-block: clamp(1.5rem, 5vw, 4rem);
+    }
+
+    .hero {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .hero__eyebrow,
+    .task-card__eyebrow {
+      margin: 0 0 0.35rem;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .hero__title {
+      margin: 0;
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+    }
+
+    .hero__text {
+      max-width: 650px;
+      margin: 0.8rem auto 0;
+      color: var(--muted);
+    }
+
+    .workspace {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.5rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .tabs__button {
+      display: inline-flex;
+      min-height: 3rem;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.65rem;
+      border: 1px solid transparent;
+      border-radius: 0.75rem;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 750;
+      transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+    }
+
+    .tabs__button:hover {
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    .tabs__button[aria-selected="true"] {
+      border-color: #c7d2fe;
+      color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgb(67 56 202 / 10%);
+    }
+
+    .tabs__number {
+      display: inline-grid;
+      width: 1.65rem;
+      height: 1.65rem;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--primary);
+      font-size: 0.78rem;
+    }
+
+    .task {
+      min-height: 440px;
+      padding: clamp(1.25rem, 5vw, 3rem);
+    }
+
+    .task-card {
+      max-width: 680px;
+      margin-inline: auto;
+    }
+
+    .task-card__title {
+      margin: 0;
+      font-size: clamp(1.55rem, 4vw, 2.1rem);
+      letter-spacing: -0.025em;
+    }
+
+    .task-card__description {
+      margin: 0.55rem 0 1.75rem;
+      color: var(--muted);
+    }
+
+    .field {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    .field__label {
+      font-weight: 750;
+    }
+
+    .field__input {
+      width: 100%;
+      min-height: 3rem;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      color: var(--text);
+      background: var(--surface-soft);
+    }
+
+    .field__input:hover {
+      border-color: #94a3b8;
+    }
+
+    .field__input[aria-invalid="true"] {
+      border-color: var(--danger);
+    }
+
+    .field__hint,
+    .field__error {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    .field__hint {
+      color: var(--muted);
+    }
+
+    .field__error {
+      color: var(--danger);
+      font-weight: 650;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 2.9rem;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1rem;
+      border: 0;
+      border-radius: 0.75rem;
+      color: #ffffff;
+      background: var(--primary);
+      font-weight: 750;
+      transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    .button:hover {
+      background: var(--primary-hover);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .button--secondary {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: var(--surface-soft);
+    }
+
+    .button--secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #c7d2fe;
+      border-radius: 1rem;
+      background: var(--primary-soft);
+    }
+
+    .result__label {
+      margin: 0 0 0.25rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .result__value {
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-size: clamp(1.25rem, 4vw, 1.75rem);
+      font-weight: 800;
+    }
+
+    .counter {
+      display: grid;
+      justify-items: start;
+      gap: 1rem;
+    }
+
+    .counter__value {
+      margin: 0;
+      font-size: clamp(3rem, 15vw, 6rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .description-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-left: 4px solid var(--success);
+      border-radius: 0 0.75rem 0.75rem 0;
+      background: #ecfdf5;
+    }
+
+    .description-box p {
+      margin: 0;
+    }
+
+    .item-list,
+    .people-list {
+      display: grid;
+      gap: 0.65rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .item-list__item,
+    .people-list__item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      background: var(--surface-soft);
+    }
+
+    .item-list__number {
+      display: inline-grid;
+      width: 1.8rem;
+      height: 1.8rem;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(8rem, 1fr) auto;
+      align-items: start;
+      gap: 0.75rem;
+    }
+
+    .form-grid .field {
+      margin: 0;
+    }
+
+    .form-grid .button {
+      margin-top: 2rem;
+    }
+
+    .people-list {
+      margin-top: 1.5rem;
+    }
+
+    .people-list__item {
+      justify-content: space-between;
+    }
+
+    .people-list__age {
+      color: var(--muted);
+    }
+
+    .math-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .math-card {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface-soft);
+    }
+
+    .math-card__label {
+      margin: 0 0 0.3rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .math-card__value {
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-size: clamp(1.2rem, 4vw, 1.65rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock {
+      padding: clamp(1.25rem, 5vw, 2rem);
+      border: 1px solid #c7d2fe;
+      border-radius: 1.25rem;
+      background: linear-gradient(135deg, #eef2ff, #eff6ff);
+      text-align: center;
+    }
+
+    .clock__greeting {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .clock__time {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: clamp(2.4rem, 12vw, 5rem);
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+    }
+
+    .clock__date {
+      margin: 0.6rem 0 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding-top: 1.25rem;
+      color: var(--muted);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .tabs {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .tabs__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid .button {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        width: min(100% - 1rem, 1024px);
+        padding-block: 1rem;
+      }
+
+      .workspace {
+        border-radius: 1rem;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(4, 1fr);
+        padding: 0.65rem;
+      }
+
+      .tabs__button {
+        min-width: 0;
+        min-height: 2.75rem;
+        padding: 0.45rem;
+      }
+
+      .task {
+        min-height: 400px;
+      }
+
+      .math-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak>
+  <main class="shell">
+    <header class="hero">
+      <p class="hero__eyebrow">Vue 3 · лабораторная работа №5</p>
+      <h1 class="hero__title">Семь шагов к реактивности</h1>
+      <p class="hero__text">Интерактивные примеры Options API и Composition API на одной странице.</p>
+    </header>
+
+    <section class="workspace" aria-labelledby="workspace-title">
+      <h2 id="workspace-title" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">Задания лабораторной работы</h2>
+      <div class="tabs" role="tablist" aria-label="Выберите задание">
+        <button
+          v-for="(tab, i) in tabs"
+          :id="`tab-${i + 1}`"
+          :key="tab.id"
+          class="tabs__button"
+          type="button"
+          role="tab"
+          :aria-selected="currentTab === i"
+          :aria-controls="`panel-${i + 1}`"
+          :tabindex="currentTab === i ? 0 : -1"
+          @click="currentTab = i"
+          @keydown="moveTab($event, i)"
+        >
+          <span class="tabs__number">{{ i + 1 }}</span>
+          <span class="tabs__label">Задание</span>
+        </button>
+      </div>
+
+      <div
+        :id="`panel-${currentTab + 1}`"
+        class="task"
+        role="tabpanel"
+        :aria-labelledby="`tab-${currentTab + 1}`"
+        tabindex="0"
+      >
+        <component :is="tabs[currentTab].component"></component>
+      </div>
+    </section>
+
+    <footer class="footer">Улискин Даниил Евгеньевич · ФИТ-241</footer>
+  </main>
+</div>
+
+<script>
+  const {
+    createApp,
+    ref,
+    computed,
+    watch,
+    onMounted,
+    onUnmounted,
+    defineComponent
+  } = Vue
+
+  // --- ЗАДАНИЕ 1: Options API, интерполяция и v-model ---
+  const Task1 = defineComponent({
+    name: 'GreetingTask',
+    data() {
+      return {
+        name: 'Даниил'
+      }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 1 · Options API</p>
+        <h2 class="task-card__title">Привет, Vue!</h2>
+        <p class="task-card__description">Введите имя — приветствие изменится автоматически благодаря <code>v-model</code>.</p>
+        <div class="field">
+          <label class="field__label" for="greeting-name">Ваше имя</label>
+          <input id="greeting-name" v-model.trim="name" class="field__input" type="text" maxlength="60" autocomplete="name" placeholder="Например, Анна" />
+        </div>
+        <div class="result" aria-live="polite">
+          <p class="result__label">Приветствие</p>
+          <p class="result__value">Привет<span v-if="name">, {{ name }}</span>!</p>
+        </div>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 2: ref и обработка события ---
+  const Task2 = defineComponent({
+    name: 'CounterTask',
+    setup() {
+      const count = ref(0)
+      const increment = () => {
+        count.value += 1
+      }
+      return { count, increment }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 2 · Composition API</p>
+        <h2 class="task-card__title">Реактивный счётчик</h2>
+        <p class="task-card__description">Каждое нажатие изменяет реактивное значение, созданное через <code>ref</code>.</p>
+        <div class="counter">
+          <p class="counter__value" aria-live="polite">{{ count }}</p>
+          <button class="button" type="button" @click="increment">Увеличить на один</button>
+        </div>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 3: условный рендеринг ---
+  const Task3 = defineComponent({
+    name: 'ConditionalTask',
+    setup() {
+      const isVisible = ref(false)
+      const toggleDescription = () => {
+        isVisible.value = !isVisible.value
+      }
+      return { isVisible, toggleDescription }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 3 · Composition API</p>
+        <h2 class="task-card__title">Условный рендеринг</h2>
+        <p class="task-card__description">Vue добавляет или удаляет блок описания с помощью директивы <code>v-if</code>.</p>
+        <button class="button button--secondary" type="button" :aria-expanded="isVisible" aria-controls="vue-description" @click="toggleDescription">
+          {{ isVisible ? 'Скрыть описание' : 'Показать описание' }}
+        </button>
+        <div v-if="isVisible" id="vue-description" class="description-box">
+          <p>Vue — прогрессивный JavaScript-фреймворк для создания пользовательских интерфейсов. Его реактивная система обновляет страницу при изменении данных.</p>
+        </div>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 4: v-for и уникальные ключи ---
+  const Task4 = defineComponent({
+    name: 'ListTask',
+    setup() {
+      const tasks = ref([
+        { id: 101, title: 'Изучить реактивность' },
+        { id: 102, title: 'Создать первый компонент' },
+        { id: 103, title: 'Разобраться с директивами' },
+        { id: 104, title: 'Проверить приложение' }
+      ])
+      return { tasks }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 4 · Composition API</p>
+        <h2 class="task-card__title">Список элементов</h2>
+        <p class="task-card__description">Массив выводится директивой <code>v-for</code>; идентификатор элемента используется как уникальный ключ.</p>
+        <ol class="item-list">
+          <li v-for="(task, index) in tasks" :key="task.id" class="item-list__item">
+            <span class="item-list__number" aria-hidden="true">{{ index + 1 }}</span>
+            <span><span class="sr-only">Задача {{ index + 1 }}: </span>{{ task.title }}</span>
+          </li>
+        </ol>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 5: мини-форма ---
+  const Task5 = defineComponent({
+    name: 'MiniFormTask',
+    setup() {
+      const name = ref('')
+      const age = ref('')
+      const people = ref([])
+      const error = ref('')
+      let nextId = 1
+
+      const addPerson = () => {
+        const normalizedName = name.value.trim()
+        const normalizedAge = Number(age.value)
+
+        if (!normalizedName || !Number.isInteger(normalizedAge) || normalizedAge < 1 || normalizedAge > 130) {
+          error.value = 'Введите имя и возраст от 1 до 130 лет.'
+          return
+        }
+
+        people.value.push({ id: nextId++, name: normalizedName, age: normalizedAge })
+        name.value = ''
+        age.value = ''
+        error.value = ''
+      }
+
+      return { name, age, people, error, addPerson }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 5 · Composition API</p>
+        <h2 class="task-card__title">Мини-форма</h2>
+        <p class="task-card__description">Форма создаёт объект, добавляет его в реактивный массив и очищает поля после отправки.</p>
+        <form class="form-grid" @submit.prevent="addPerson" novalidate>
+          <div class="field">
+            <label class="field__label" for="person-name">Имя</label>
+            <input id="person-name" v-model="name" class="field__input" type="text" maxlength="60" autocomplete="name" :aria-invalid="Boolean(error)" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="person-age">Возраст</label>
+            <input id="person-age" v-model="age" class="field__input" type="number" min="1" max="130" inputmode="numeric" :aria-invalid="Boolean(error)" aria-describedby="person-form-error" />
+          </div>
+          <button class="button" type="submit">Добавить</button>
+        </form>
+        <p v-if="error" id="person-form-error" class="field__error" role="alert">{{ error }}</p>
+        <ul v-if="people.length" class="people-list" aria-label="Добавленные пользователи">
+          <li v-for="person in people" :key="person.id" class="people-list__item">
+            <strong>{{ person.name }}</strong>
+            <span class="people-list__age">{{ person.age }} лет</span>
+          </li>
+        </ul>
+        <p v-else class="field__hint" aria-live="polite">Пока никто не добавлен.</p>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 6: computed ---
+  const Task6 = defineComponent({
+    name: 'ComputedTask',
+    setup() {
+      const number = ref(2)
+      const normalizedNumber = computed(() => Number(number.value) || 0)
+      const square = computed(() => normalizedNumber.value ** 2)
+      const cube = computed(() => normalizedNumber.value ** 3)
+      return { number, normalizedNumber, square, cube }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 6 · Composition API</p>
+        <h2 class="task-card__title">Вычисляемые свойства</h2>
+        <p class="task-card__description">Квадрат и куб пересчитываются автоматически через <code>computed</code>.</p>
+        <div class="field">
+          <label class="field__label" for="math-number">Введите число</label>
+          <input id="math-number" v-model.number="number" class="field__input" type="number" step="any" inputmode="decimal" />
+        </div>
+        <div class="math-grid" aria-live="polite">
+          <div class="math-card">
+            <p class="math-card__label">Число</p>
+            <p class="math-card__value">{{ normalizedNumber }}</p>
+          </div>
+          <div class="math-card">
+            <p class="math-card__label">Квадрат</p>
+            <p class="math-card__value">{{ square }}</p>
+          </div>
+          <div class="math-card">
+            <p class="math-card__label">Куб</p>
+            <p class="math-card__value">{{ cube }}</p>
+          </div>
+        </div>
+      </article>
+    `
+  })
+
+  // --- ЗАДАНИЕ 7: watch и жизненный цикл ---
+  const Task7 = defineComponent({
+    name: 'ClockTask',
+    setup() {
+      const currentTime = ref(new Date())
+      let timerId
+
+      const formattedTime = computed(() => currentTime.value.toLocaleTimeString('ru-RU'))
+      const formattedDate = computed(() => currentTime.value.toLocaleDateString('ru-RU', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }))
+      const greeting = computed(() => {
+        const hour = currentTime.value.getHours()
+        if (hour >= 5 && hour < 12) return 'Доброе утро'
+        if (hour >= 12 && hour < 18) return 'Добрый день'
+        if (hour >= 18 && hour < 23) return 'Добрый вечер'
+        return 'Доброй ночи'
+      })
+
+      watch(currentTime, (newTime, oldTime) => {
+        console.log(`[watch] Время изменилось: ${oldTime.toLocaleTimeString('ru-RU')} → ${newTime.toLocaleTimeString('ru-RU')}`)
+      })
+
+      onMounted(() => {
+        console.log('[onMounted] Компонент часов смонтирован, таймер запущен')
+        timerId = window.setInterval(() => {
+          currentTime.value = new Date()
+        }, 1000)
+      })
+
+      onUnmounted(() => {
+        window.clearInterval(timerId)
+        console.log('[onUnmounted] Компонент часов удалён, таймер остановлен')
+      })
+
+      return { currentTime, formattedTime, formattedDate, greeting }
+    },
+    template: `
+      <article class="task-card">
+        <p class="task-card__eyebrow">Задание 7 · Composition API</p>
+        <h2 class="task-card__title">Watch и жизненный цикл</h2>
+        <p class="task-card__description">Таймер запускается в <code>onMounted</code>, обновляет реактивное время, а <code>watch</code> фиксирует изменения в консоли.</p>
+        <div class="clock">
+          <p class="clock__greeting">{{ greeting }}!</p>
+          <time class="clock__time" :datetime="currentTime.toISOString()">{{ formattedTime }}</time>
+          <p class="clock__date">{{ formattedDate }}</p>
+        </div>
+      </article>
+    `
+  })
+
+  createApp({
+    setup() {
+      const currentTab = ref(0)
+      const tabs = [
+        { id: 'greeting', component: Task1 },
+        { id: 'counter', component: Task2 },
+        { id: 'conditional', component: Task3 },
+        { id: 'list', component: Task4 },
+        { id: 'form', component: Task5 },
+        { id: 'computed', component: Task6 },
+        { id: 'clock', component: Task7 }
+      ]
+
+      const moveTab = (event, index) => {
+        const lastIndex = tabs.length - 1
+        let nextIndex = index
+
+        if (event.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1
+        else if (event.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1
+        else if (event.key === 'Home') nextIndex = 0
+        else if (event.key === 'End') nextIndex = lastIndex
+        else return
+
+        event.preventDefault()
+        currentTab.value = nextIndex
+        Vue.nextTick(() => document.getElementById(`tab-${nextIndex + 1}`)?.focus())
+      }
+
+      return { currentTab, tabs, moveTab }
+    }
+  }).mount('#app')
+</script>
+</body>
+</html>
+
