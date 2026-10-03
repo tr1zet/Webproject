@@ -84,12 +84,6 @@
       padding-block: clamp(1.5rem, 5vw, 4rem);
     }
 
-    .hero {
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-
-    .hero__eyebrow,
     .task-card__eyebrow {
       margin: 0 0 0.35rem;
       color: var(--primary);
@@ -97,19 +91,6 @@
       font-weight: 800;
       letter-spacing: 0.09em;
       text-transform: uppercase;
-    }
-
-    .hero__title {
-      margin: 0;
-      font-size: clamp(2rem, 7vw, 3.4rem);
-      line-height: 1.1;
-      letter-spacing: -0.045em;
-    }
-
-    .hero__text {
-      max-width: 650px;
-      margin: 0.8rem auto 0;
-      color: var(--muted);
     }
 
     .workspace {
@@ -178,14 +159,9 @@
     }
 
     .task-card__title {
-      margin: 0;
+      margin: 0 0 1.75rem;
       font-size: clamp(1.55rem, 4vw, 2.1rem);
       letter-spacing: -0.025em;
-    }
-
-    .task-card__description {
-      margin: 0.55rem 0 1.75rem;
-      color: var(--muted);
     }
 
     .field {
@@ -506,12 +482,6 @@
 <body>
 <div id="app" v-cloak>
   <main class="shell">
-    <header class="hero">
-      <p class="hero__eyebrow">Vue 3 · лабораторная работа №5</p>
-      <h1 class="hero__title">Семь шагов к реактивности</h1>
-      <p class="hero__text">Интерактивные примеры Options API и Composition API на одной странице.</p>
-    </header>
-
     <section class="workspace" aria-labelledby="workspace-title">
       <h2 id="workspace-title" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">Задания лабораторной работы</h2>
       <div class="tabs" role="tablist" aria-label="Выберите задание">
@@ -571,7 +541,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 1 · Options API</p>
         <h2 class="task-card__title">Привет, Vue!</h2>
-        <p class="task-card__description">Введите имя — приветствие изменится автоматически благодаря <code>v-model</code>.</p>
         <div class="field">
           <label class="field__label" for="greeting-name">Ваше имя</label>
           <input id="greeting-name" v-model.trim="name" class="field__input" type="text" maxlength="60" autocomplete="name" placeholder="Например, Анна" />
@@ -598,7 +567,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 2 · Composition API</p>
         <h2 class="task-card__title">Реактивный счётчик</h2>
-        <p class="task-card__description">Каждое нажатие изменяет реактивное значение, созданное через <code>ref</code>.</p>
         <div class="counter">
           <p class="counter__value" aria-live="polite">{{ count }}</p>
           <button class="button" type="button" @click="increment">Увеличить на один</button>
@@ -621,7 +589,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 3 · Composition API</p>
         <h2 class="task-card__title">Условный рендеринг</h2>
-        <p class="task-card__description">Vue добавляет или удаляет блок описания с помощью директивы <code>v-if</code>.</p>
         <button class="button button--secondary" type="button" :aria-expanded="isVisible" aria-controls="vue-description" @click="toggleDescription">
           {{ isVisible ? 'Скрыть описание' : 'Показать описание' }}
         </button>
@@ -637,10 +604,10 @@
     name: 'ListTask',
     setup() {
       const tasks = ref([
-        { id: 101, title: 'Изучить реактивность' },
-        { id: 102, title: 'Создать первый компонент' },
-        { id: 103, title: 'Разобраться с директивами' },
-        { id: 104, title: 'Проверить приложение' }
+        { id: 101, title: 'Приехать в вуз' },
+        { id: 102, title: 'Приложить пропуск' },
+        { id: 103, title: 'Найти аудиторию' },
+        { id: 104, title: 'Сидеть на паре' }
       ])
       return { tasks }
     },
@@ -648,7 +615,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 4 · Composition API</p>
         <h2 class="task-card__title">Список элементов</h2>
-        <p class="task-card__description">Массив выводится директивой <code>v-for</code>; идентификатор элемента используется как уникальный ключ.</p>
         <ol class="item-list">
           <li v-for="(task, index) in tasks" :key="task.id" class="item-list__item">
             <span class="item-list__number" aria-hidden="true">{{ index + 1 }}</span>
@@ -690,7 +656,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 5 · Composition API</p>
         <h2 class="task-card__title">Мини-форма</h2>
-        <p class="task-card__description">Форма создаёт объект, добавляет его в реактивный массив и очищает поля после отправки.</p>
         <form class="form-grid" @submit.prevent="addPerson" novalidate>
           <div class="field">
             <label class="field__label" for="person-name">Имя</label>
@@ -728,7 +693,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 6 · Composition API</p>
         <h2 class="task-card__title">Вычисляемые свойства</h2>
-        <p class="task-card__description">Квадрат и куб пересчитываются автоматически через <code>computed</code>.</p>
         <div class="field">
           <label class="field__label" for="math-number">Введите число</label>
           <input id="math-number" v-model.number="number" class="field__input" type="number" step="any" inputmode="decimal" />
@@ -795,7 +759,6 @@
       <article class="task-card">
         <p class="task-card__eyebrow">Задание 7 · Composition API</p>
         <h2 class="task-card__title">Watch и жизненный цикл</h2>
-        <p class="task-card__description">Таймер запускается в <code>onMounted</code>, обновляет реактивное время, а <code>watch</code> фиксирует изменения в консоли.</p>
         <div class="clock">
           <p class="clock__greeting">{{ greeting }}!</p>
           <time class="clock__time" :datetime="currentTime.toISOString()">{{ formattedTime }}</time>
