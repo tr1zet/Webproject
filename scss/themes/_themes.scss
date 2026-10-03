@@ -1,0 +1,47 @@
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page-bg: #eef2ff;
+  --page-accent: #dbeafe;
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --surface-hover: #f1f5f9;
+  --text-primary: #172033;
+  --text-secondary: #526078;
+  --text-muted: #64748b;
+  --border: #d7dfeb;
+  --primary: #4f46e5;
+  --primary-hover: #3730a3;
+  --primary-text: #ffffff;
+  --focus: #c026d3;
+  --danger: #b42318;
+  --danger-bg: #fff1f0;
+  --success: #166534;
+  --success-bg: #dcfce7;
+  --overlay: rgb(15 23 42 / 58%);
+  --shadow: 0 24px 70px rgb(30 41 59 / 15%);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #0b1020;
+  --page-accent: #172554;
+  --surface: #151c2f;
+  --surface-subtle: #1d263d;
+  --surface-hover: #26324d;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #aab7ca;
+  --border: #3a4864;
+  --primary: #818cf8;
+  --primary-hover: #a5b4fc;
+  --primary-text: #111827;
+  --focus: #f0abfc;
+  --danger: #fda29b;
+  --danger-bg: #4a1d22;
+  --success: #86efac;
+  --success-bg: #163b2a;
+  --overlay: rgb(0 0 0 / 72%);
+  --shadow: 0 24px 70px rgb(0 0 0 / 35%);
+}
+
