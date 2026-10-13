@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Доступное приложение для управления повседневными задачами">
+    <title>Мои задачи</title>
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem('todo-theme');
+          const theme = savedTheme === 'dark' || savedTheme === 'light'
+            ? savedTheme
+            : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="dist/css/main.css">
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#task-list-title">Перейти к списку задач</a>
+
+    <main class="app-shell">
+      <section class="todo" aria-labelledby="page-title">
+        <header class="todo__header">
+          <div>
+            <p class="todo__eyebrow">Организуйте свой день</p>
+            <h1 class="todo__title" id="page-title">Мои задачи</h1>
+          </div>
+          <button class="theme-toggle js-theme-toggle" type="button" aria-pressed="false">
+            <svg class="theme-toggle__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path d="M12 3a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H13a1 1 0 0 1-1-1Zm0 18a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H13a1 1 0 0 1-1-1ZM4.22 5.64a1 1 0 0 1 1.42-1.42l.01.01a1 1 0 0 1-1.42 1.42l-.01-.01Zm12.73 12.73a1 1 0 0 1 1.42-1.42l.01.01a1 1 0 0 1-1.42 1.42l-.01-.01ZM2 12a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H3a1 1 0 0 1-1-1Zm18 0a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2H21a1 1 0 0 1-1-1ZM4.22 18.36a1 1 0 0 1 0-1.41l.01-.01a1 1 0 0 1 1.42 1.42l-.01.01a1 1 0 0 1-1.42-.01ZM16.95 5.63a1 1 0 0 1 0-1.41l.01-.01a1 1 0 1 1 1.42 1.42l-.01.01a1 1 0 0 1-1.42-.01ZM17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z" fill="currentColor"/>
+            </svg>
+            <span class="js-theme-label">Тёмная тема</span>
+          </button>
+        </header>
+
+        <div class="todo__toolbar">
+          <div class="search">
+            <label class="visually-hidden" for="task-search">Поиск задач</label>
+            <svg class="search__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path d="m20 20-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input class="search__input js-search" id="task-search" type="search" placeholder="Найти задачу…" autocomplete="off">
+          </div>
+          <button class="button button--primary js-add-task" type="button">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Добавить задачу</span>
+          </button>
+        </div>
+
+        <div class="todo__summary" aria-live="polite" aria-atomic="true">
+          <h2 class="todo__list-title" id="task-list-title">Список задач</h2>
+          <p class="todo__counter js-counter">Нет задач</p>
+        </div>
+
+        <ul class="task-list js-task-list" aria-labelledby="task-list-title"></ul>
+
+        <div class="empty-state js-empty-state" hidden>
+          <svg class="empty-state__icon" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false">
+            <path d="M18 10h28a6 6 0 0 1 6 6v36H12V16a6 6 0 0 1 6-6Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M23 25h18M23 35h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="m23 44 4 4 9-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h2 class="empty-state__title js-empty-title">Задач пока нет</h2>
+          <p class="empty-state__text js-empty-text">Добавьте первую задачу — и начните двигаться к цели.</p>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="modal js-task-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-hint">
+      <form class="modal__panel js-task-form" method="dialog" novalidate>
+        <div class="modal__heading">
+          <div>
+            <p class="modal__eyebrow">План на сегодня</p>
+            <h2 class="modal__title" id="dialog-title">Новая задача</h2>
+          </div>
+          <button class="icon-button js-close-dialog" type="button" aria-label="Закрыть окно">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <p class="modal__hint" id="dialog-hint">Введите короткое и понятное название.</p>
+        <div class="field">
+          <label class="field__label" for="task-title-input">Название задачи</label>
+          <input class="field__input js-task-title" id="task-title-input" name="title" type="text" maxlength="120" required autocomplete="off" aria-describedby="task-title-error">
+          <p class="field__error js-form-error" id="task-title-error" role="alert"></p>
+        </div>
+        <div class="modal__actions">
+          <button class="button button--secondary js-cancel-dialog" type="button">Отмена</button>
+          <button class="button button--primary js-submit-task" type="submit">Добавить</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="visually-hidden js-live-region" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>
+

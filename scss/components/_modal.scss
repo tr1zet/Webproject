@@ -1,0 +1,87 @@
+@use "../utils" as u;
+
+.modal {
+  width: min(calc(100% - 2rem), 32rem);
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: u.$radius-large;
+  color: var(--text-primary);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+
+  &::backdrop {
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+  }
+
+  &__panel {
+    padding: clamp(1.25rem, 5vw, 2rem);
+  }
+
+  &__heading,
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__eyebrow {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    font-size: 1.45rem;
+  }
+
+  &__hint {
+    margin-block: 1rem 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  &__actions {
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+
+  &__label {
+    font-weight: 720;
+  }
+
+  &__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: u.$radius-small;
+    color: var(--text-primary);
+    background: var(--surface-subtle);
+
+    &:focus-visible {
+      @include u.focus-ring;
+      border-color: var(--primary);
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--danger);
+    }
+  }
+
+  &__error {
+    min-height: 1.5em;
+    color: var(--danger);
+    font-size: 0.875rem;
+    font-weight: 650;
+  }
+}
+
