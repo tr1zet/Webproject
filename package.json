@@ -1,0 +1,20 @@
+{
+  "name": "accessible-todo-vue",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Accessible responsive To-Do List built with Vue 3, Vite and Sass",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "sass": "^1.93.2",
+    "vite": "^7.1.9"
+  }
+}
+
