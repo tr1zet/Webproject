@@ -49,5 +49,3 @@ npm run preview
 [Открыть опубликованное приложение](https://tr1zet.github.io/Webproject/)
 
 Для публикации используется GitHub Pages. Workflow `.github/workflows/ci.yaml` устанавливает зависимости через `npm ci`, собирает приложение и публикует содержимое `dist/` после отправки ветки `lab-6`. Для корректных путей на проектной странице в `vite.config.js` задан `base: '/Webproject/'`.
-
-Предыдущая работа также сохраняется на GitHub Pages: [открыть лабораторную работу №5](https://tr1zet.github.io/Webproject/lab-5/).
