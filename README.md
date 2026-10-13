@@ -29,4 +29,4 @@ npx serve .
 
 ## Опубликованная версия
 
-[Открыть лабораторную работу №5](https://tr1zet.github.io/Webproject/)
+[Открыть лабораторную работу №5](https://tr1zet.github.io/Webproject/lab-5/)
