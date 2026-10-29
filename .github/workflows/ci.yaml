@@ -80,7 +80,6 @@ jobs:
         run: |
           mkdir -p site/lab-4 site/lab-4-tailwind site/lab-5 site/lab-6 site/lab-7
           cp pages/index.html site/index.html
-          cp pages/lab-switcher.js site/lab-switcher.js
           touch site/.nojekyll
           cp previous-lab-4/index.html site/lab-4/index.html
           cp -r previous-lab-4/js previous-lab-4/dist site/lab-4/
@@ -89,7 +88,6 @@ jobs:
           cp previous-lab-5/index.html site/lab-5/index.html
           cp -r previous-lab-6/dist/. site/lab-6/
           cp -r dist/. site/lab-7/
-          node pages/inject-switcher.mjs
 
       - uses: actions/configure-pages@v6
 

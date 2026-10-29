@@ -56,4 +56,4 @@ npm run preview
 
 ## Публикация
 
-[Открыть лабораторную №7](https://tr1zet.github.io/Webproject/lab-7/)
+[Открыть опубликованное приложение](https://tr1zet.github.io/Webproject/)
