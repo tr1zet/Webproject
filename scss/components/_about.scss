@@ -1,0 +1,182 @@
+@use "../utils" as u;
+
+.about-page {
+  width: min(100%, 68rem);
+  margin-inline: auto;
+}
+
+.about-hero {
+  display: grid;
+  min-height: 28rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  padding: clamp(2rem, 6vw, 4.5rem);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: u.$radius-large;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+
+  &__eyebrow {
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    max-width: 13ch;
+    margin-block: 0.45rem 1rem;
+    font-size: clamp(2.25rem, 7vw, 4rem);
+    letter-spacing: -0.055em;
+    line-height: 1;
+  }
+
+  &__lead {
+    max-width: 42rem;
+    margin-bottom: 1.75rem;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+  }
+
+  &__visual {
+    position: relative;
+    display: grid;
+    aspect-ratio: 1;
+    place-items: center;
+  }
+
+  &__check {
+    display: grid;
+    width: 7.5rem;
+    height: 7.5rem;
+    place-items: center;
+    border-radius: 2rem;
+    color: var(--primary-text);
+    background: var(--primary);
+    box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--primary) 32%, transparent);
+    font-size: 4rem;
+    font-weight: 900;
+    transform: rotate(-7deg);
+  }
+
+  &__orbit {
+    position: absolute;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+
+    &--one {
+      inset: 8%;
+    }
+
+    &--two {
+      inset: 24%;
+    }
+  }
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.about-card,
+.about-warning {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.about-card {
+  padding: 1.5rem;
+  border-radius: u.$radius-medium;
+
+  &__number {
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    margin-block: 0.5rem;
+    font-size: 1.15rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+.about-meme {
+  display: grid;
+  width: 100%;
+  justify-items: center;
+  gap: 0.8rem;
+  margin: 1rem 0 0;
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: u.$radius-medium;
+  background: var(--surface);
+
+  img {
+    display: block;
+    width: min(100%, 50rem);
+    height: auto;
+    border-radius: u.$radius-small;
+  }
+
+  figcaption {
+    color: var(--text-secondary);
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.about-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  border-radius: u.$radius-medium;
+
+  &__icon {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--danger);
+    background: var(--danger-bg);
+    font-weight: 900;
+  }
+
+  h2 {
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+@media (max-width: u.$breakpoint-mobile) {
+  .about-hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+
+    &__visual {
+      display: none;
+    }
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}

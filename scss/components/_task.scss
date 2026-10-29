@@ -1,0 +1,113 @@
+@use "../utils" as u;
+
+.task-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: u.$radius-medium;
+  background: var(--surface-subtle);
+
+  &__content {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  &__checkbox {
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+
+    &:focus-visible {
+      @include u.focus-ring;
+    }
+  }
+
+  &__title {
+    overflow-wrap: anywhere;
+    font-weight: 680;
+    cursor: pointer;
+  }
+
+  &__state {
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    color: var(--text-secondary);
+    background: var(--surface-hover);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &__actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.2rem;
+  }
+
+  &[data-done="true"] {
+    .task__title {
+      color: var(--text-muted);
+      text-decoration: line-through 2px;
+    }
+
+    .task__state {
+      color: var(--success);
+      background: var(--success-bg);
+    }
+  }
+
+  @media (max-width: u.$breakpoint-mobile) {
+    align-items: flex-start;
+    gap: 0.35rem;
+
+    &__content {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    &__state {
+      width: fit-content;
+      grid-column: 2;
+    }
+  }
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  padding: clamp(3rem, 10vw, 5rem) 1rem;
+  color: var(--text-secondary);
+  text-align: center;
+
+  &__icon {
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  &__title {
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+  }
+
+  &__text {
+    max-width: 27rem;
+  }
+}
+
