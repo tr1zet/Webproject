@@ -27,6 +27,6 @@ npx serve .
 
 
 
-## Опубликованная версия
+## Публикация
 
-[Открыть лабораторную работу №5](https://tr1zet.github.io/Webproject/lab-5/)
+[Открыть опубликованное приложение](https://tr1zet.github.io/Webproject/)
