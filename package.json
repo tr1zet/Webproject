@@ -1,0 +1,18 @@
+{
+  "name": "accessible-todo-tailwind",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Accessible responsive To-Do List built with Tailwind CSS and vanilla JavaScript",
+  "scripts": {
+    "tailwind:dev": "tailwindcss -i ./src/input.css -o ./dist/css/main.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./dist/css/main.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.1.14",
+    "tailwindcss": "4.1.14"
+  },
+  "overrides": {
+    "@parcel/watcher": "2.6.0"
+  }
+}
+
