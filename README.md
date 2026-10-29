@@ -57,12 +57,3 @@ npm run preview
 ## Публикация
 
 [Открыть лабораторную №7](https://tr1zet.github.io/Webproject/lab-7/)
-
-Другие опубликованные версии:
-
-- [лабораторная №4 — Sass](https://tr1zet.github.io/Webproject/lab-4/);
-- [лабораторная №4 — Tailwind CSS](https://tr1zet.github.io/Webproject/lab-4-tailwind/);
-- [лабораторная №5](https://tr1zet.github.io/Webproject/lab-5/);
-- [лабораторная №6](https://tr1zet.github.io/Webproject/lab-6/).
-
-GitHub Actions собирает лабораторные и публикует единый Pages-артефакт после отправки ветки `lab-7`. Каждая версия находится в собственном каталоге, поэтому новая работа не перезаписывает предыдущие. Корневой адрес репозитория открывает страницу выбора лабораторной.
