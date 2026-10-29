@@ -1,0 +1,88 @@
+@use "../utils" as u;
+
+.auth-page {
+  display: grid;
+  min-height: calc(100vh - 11rem);
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 31rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: u.$radius-large;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+
+  &__eyebrow {
+    margin-bottom: 0.25rem;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+  }
+
+  &__intro {
+    margin-block: 0.75rem 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  &__footer {
+    margin-top: 1.25rem;
+    color: var(--text-secondary);
+    text-align: center;
+
+    a {
+      color: var(--primary);
+      font-weight: 750;
+    }
+  }
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.85rem;
+
+  &__submit {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}
+
+.field__hint {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.form-notice {
+  padding: 0.75rem 0.9rem;
+  border-radius: u.$radius-small;
+  font-size: 0.9rem;
+  font-weight: 650;
+
+  &--error {
+    color: var(--danger);
+    background: var(--danger-bg);
+  }
+
+  &--success {
+    margin-bottom: 1rem;
+    color: var(--success);
+    background: var(--success-bg);
+  }
+}
+
+.security-note {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}

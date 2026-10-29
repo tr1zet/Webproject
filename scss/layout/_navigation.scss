@@ -1,0 +1,128 @@
+@use "../utils" as u;
+
+.site-header {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+
+  &__inner {
+    display: flex;
+    width: min(100% - 2rem, 74rem);
+    min-height: 5rem;
+    align-items: center;
+    gap: 1.25rem;
+    margin-inline: auto;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-left: auto;
+  }
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--text-primary);
+  font-weight: 800;
+  text-decoration: none;
+
+  &:focus-visible {
+    @include u.focus-ring;
+  }
+
+  &__mark {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 0.65rem;
+    color: var(--primary-text);
+    background: var(--primary);
+  }
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  &__link {
+    padding: 0.55rem 0.7rem;
+    border-radius: u.$radius-small;
+    color: var(--text-secondary);
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover,
+    &.router-link-active {
+      color: var(--text-primary);
+      background: var(--surface-hover);
+    }
+
+    &:focus-visible {
+      @include u.focus-ring;
+    }
+  }
+}
+
+.site-auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.account-email {
+  max-width: 12rem;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 58rem) {
+  .site-header {
+    &__inner {
+      flex-wrap: wrap;
+      padding-block: 0.75rem;
+    }
+
+    &__actions {
+      margin-left: 0;
+    }
+  }
+
+  .site-nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .account-email {
+    display: none;
+  }
+}
+
+@media (max-width: 38rem) {
+  .site-header {
+    &__inner {
+      width: min(100% - 1rem, 74rem);
+      gap: 0.6rem;
+    }
+
+    &__actions {
+      margin-left: auto;
+    }
+  }
+
+  .site-brand > span:last-child {
+    @include u.visually-hidden;
+  }
+}

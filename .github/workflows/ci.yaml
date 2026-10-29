@@ -1,0 +1,99 @@
+name: Build and publish laboratory sites
+
+on:
+  push:
+    branches: [lab-7]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download laboratory 7
+        uses: actions/checkout@v7
+
+      - name: Download laboratory 4 (Sass)
+        uses: actions/checkout@v7
+        with:
+          ref: lab-4
+          path: previous-lab-4
+
+      - name: Download laboratory 4 (Tailwind)
+        uses: actions/checkout@v7
+        with:
+          ref: lab-4-tailwind
+          path: previous-lab-4-tailwind
+
+      - name: Download laboratory 5
+        uses: actions/checkout@v7
+        with:
+          ref: lab-5
+          path: previous-lab-5
+
+      - name: Download laboratory 6
+        uses: actions/checkout@v7
+        with:
+          ref: lab-6
+          path: previous-lab-6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Build laboratory 4 (Sass)
+        working-directory: previous-lab-4
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build laboratory 4 (Tailwind)
+        working-directory: previous-lab-4-tailwind
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build laboratory 6
+        working-directory: previous-lab-6
+        run: |
+          npm ci
+          npm run build -- --base=/Webproject/lab-6/
+
+      - name: Build laboratory 7
+        run: |
+          npm ci
+          npm run build -- --base=/Webproject/lab-7/
+
+      - name: Assemble independent sites
+        run: |
+          mkdir -p site/lab-4 site/lab-4-tailwind site/lab-5 site/lab-6 site/lab-7
+          cp pages/index.html site/index.html
+          touch site/.nojekyll
+          cp previous-lab-4/index.html site/lab-4/index.html
+          cp -r previous-lab-4/js previous-lab-4/dist site/lab-4/
+          cp previous-lab-4-tailwind/index.html site/lab-4-tailwind/index.html
+          cp -r previous-lab-4-tailwind/js previous-lab-4-tailwind/dist site/lab-4-tailwind/
+          cp previous-lab-5/index.html site/lab-5/index.html
+          cp -r previous-lab-6/dist/. site/lab-6/
+          cp -r dist/. site/lab-7/
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./site
+
+      - id: deployment
+        uses: actions/deploy-pages@v5
