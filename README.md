@@ -90,4 +90,4 @@ npm run preview
 
 ## Публикация
 
-[Открыть опубликованное приложение](https://tr1zet.github.io/Webproject/lab-9/)
+[Открыть опубликованное приложение](https://tr1zet.github.io/Webproject/)
