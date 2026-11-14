@@ -5,7 +5,9 @@ import prettierConfig from 'eslint-config-prettier/flat'
 import globals from 'globals'
 
 export default withVueTs(
-  { ignores: ['**/dist/**', '**/coverage/**'] },
+  {
+    ignores: ['**/dist/**', '**/coverage/**', 'previous-lab-*/**', 'site/**']
+  },
   js.configs.recommended,
   pluginVue.configs['flat/recommended'],
   vueTsConfigs.recommended,
