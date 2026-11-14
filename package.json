@@ -1,0 +1,40 @@
+{
+  "name": "accessible-todo-vue",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Multi-user educational To-Do built with Vue, Pinia and Vue Router",
+  "scripts": {
+    "dev": "vite",
+    "type-check": "vue-tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run type-check && npm run lint && npm run format:check",
+    "build": "npm run check && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pinia": "^4.1.0",
+    "pinia-plugin-persistedstate": "^4.7.1",
+    "vue": "^3.5.22",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.12.1",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "sass": "^1.93.2",
+    "typescript": "^6.0.3",
+    "vite": "^7.1.9",
+    "vue-tsc": "^3.3.14"
+  }
+}
